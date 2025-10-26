@@ -453,6 +453,24 @@
     },
     "expired": "期限切れ"
   },
+  "MultiupHistory": {
+    "title": "Multiupリンク",
+    "columns": {
+      "fileName": "ファイル名",
+      "size": "サイズ",
+      "createdAt": "作成日時",
+      "actions": "アクション"
+    },
+    "actions": {
+      "copy": "コピー",
+      "open": "開く",
+      "remove": "削除"
+    },
+    "empty": {
+      "title": "Multiupリンクがまだありません",
+      "description": "ファイルをMultiupにアップロードすると、ここにリンクが表示されます"
+    }
+  },
   "ArchivedDownloads": {
     "title": "アーカイブされたダウンロード",
     "columns": {

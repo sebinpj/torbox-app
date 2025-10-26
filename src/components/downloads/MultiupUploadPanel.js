@@ -5,6 +5,8 @@ import Tooltip from '@/components/shared/Tooltip';
 
 export default function MultiupUploadPanel({
   uploadedLinks,
+  uploadingFiles,
+  failedFiles,
   isUploading,
   uploadProgress,
   onDismiss,
@@ -12,7 +14,7 @@ export default function MultiupUploadPanel({
   isUploadPanelOpen,
   setIsUploadPanelOpen,
 }) {
-  if (!uploadedLinks.length && !isUploading) return null;
+  if (!uploadedLinks.length && !uploadingFiles.length && !failedFiles.length && !isUploading) return null;
 
   const handleCopyLinks = () => {
     const text = uploadedLinks.map((link) => link.link).join('\n');
@@ -50,14 +52,22 @@ export default function MultiupUploadPanel({
   };
 
   const PanelTitle = () => {
+    const totalFiles = uploadedLinks.length + uploadingFiles.length + failedFiles.length;
+    const completedFiles = uploadedLinks.length;
+    
     return (
       <>
         <span>
-          {uploadedLinks.length > 1 ? 'Multiup Links' : 'Multiup Link'}
+          {totalFiles > 1 ? 'Multiup Uploads' : 'Multiup Upload'}
         </span>
         {isUploading && (
           <span className="block lg:inline text-sm text-primary-text/70 dark:text-primary-text-dark/70 lg:ml-2">
-            Uploading {uploadProgress.current} of {uploadProgress.total}
+            {uploadProgress.message || `Uploading ${completedFiles} of ${uploadProgress.total || totalFiles}`}
+          </span>
+        )}
+        {!isUploading && totalFiles > 0 && (
+          <span className="block lg:inline text-sm text-primary-text/70 dark:text-primary-text-dark/70 lg:ml-2">
+            {completedFiles} completed, {failedFiles.length} failed
           </span>
         )}
       </>
@@ -110,16 +120,20 @@ export default function MultiupUploadPanel({
                 </button>
               </div>
 
-              {/* Links */}
+              {/* Files */}
               <div className="p-4">
                 <div className="max-h-[80vh] lg:max-h-md overflow-x-hidden overflow-y-auto flex flex-col gap-2">
+                  {/* Successfully uploaded files */}
                   {uploadedLinks.map((link, index) => (
                     <div
-                      key={index}
+                      key={`success-${index}`}
                       className="flex items-center gap-2 
-                      bg-surface-alt dark:bg-surface-alt-dark text-sm p-3 rounded-lg 
-                      border border-border dark:border-border-dark transition-colors"
+                      bg-green-50 dark:bg-green-900/20 text-sm p-3 rounded-lg 
+                      border border-green-200 dark:border-green-800 transition-colors"
                     >
+                      <div className="p-1 rounded-full text-green-500 dark:text-green-400 bg-green-100 dark:bg-green-900/30">
+                        <Icons.Check className="w-4 h-4" />
+                      </div>
                       <div className="relative group min-w-0 flex-1">
                         <Tooltip content={link.fileName}>
                           <div className="block w-full truncate text-primary-text dark:text-primary-text-dark">
@@ -157,24 +171,76 @@ export default function MultiupUploadPanel({
                       </div>
                     </div>
                   ))}
-                  {isUploading &&
-                    uploadedLinks.length < uploadProgress.total && (
-                      <div className="text-primary-text dark:text-primary-text-dark/50 text-sm py-2 animate-pulse">
-                        {uploadedLinks.length > 0
-                          ? 'Uploading more files...'
-                          : 'Starting upload...'}
+
+                  {/* Currently uploading files */}
+                  {uploadingFiles.map((file, index) => (
+                    <div
+                      key={`uploading-${index}`}
+                      className="flex items-center gap-2 
+                      bg-blue-50 dark:bg-blue-900/20 text-sm p-3 rounded-lg 
+                      border border-blue-200 dark:border-blue-800 transition-colors"
+                    >
+                      <div className="p-1 rounded-full text-blue-500 dark:text-blue-400 bg-blue-100 dark:bg-blue-900/30 animate-spin">
+                        <Icons.Loader className="w-4 h-4" />
                       </div>
-                    )}
+                      <div className="relative group min-w-0 flex-1">
+                        <div className="block w-full truncate text-primary-text dark:text-primary-text-dark">
+                          <div className="font-medium">{file.fileName}</div>
+                          <div className="text-xs text-primary-text/70 dark:text-primary-text-dark/70">
+                            Uploading... ({file.index}/{file.total})
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Failed files */}
+                  {failedFiles.map((file, index) => (
+                    <div
+                      key={`failed-${index}`}
+                      className="flex items-center gap-2 
+                      bg-red-50 dark:bg-red-900/20 text-sm p-3 rounded-lg 
+                      border border-red-200 dark:border-red-800 transition-colors"
+                    >
+                      <div className="p-1 rounded-full text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-900/30">
+                        <Icons.Times className="w-4 h-4" />
+                      </div>
+                      <div className="relative group min-w-0 flex-1">
+                        <Tooltip content={file.error}>
+                          <div className="block w-full truncate text-primary-text dark:text-primary-text-dark">
+                            <div className="font-medium">{file.fileName}</div>
+                            <div className="text-xs text-red-600 dark:text-red-400">
+                              Failed: {file.error}
+                            </div>
+                          </div>
+                        </Tooltip>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Status message when uploading */}
+                  {isUploading && uploadingFiles.length === 0 && uploadedLinks.length === 0 && (
+                    <div className="text-primary-text dark:text-primary-text-dark/50 text-sm py-2 animate-pulse">
+                      {uploadProgress.message || 'Preparing uploads...'}
+                    </div>
+                  )}
                 </div>
 
-                {isUploading && (
-                  <div className="mt-2 w-full bg-border rounded-full h-2.5">
-                    <div
-                      className="bg-blue-500 h-2.5 rounded-full transition-all duration-300"
-                      style={{
-                        width: `${(uploadProgress.current / uploadProgress.total) * 100}%`,
-                      }}
-                    ></div>
+                {/* Progress bar */}
+                {isUploading && uploadProgress.total > 0 && (
+                  <div className="mt-2">
+                    <div className="flex justify-between text-xs text-primary-text/70 dark:text-primary-text-dark/70 mb-1">
+                      <span>{uploadProgress.message || `Uploading ${uploadProgress.current} of ${uploadProgress.total}`}</span>
+                      <span>{Math.round((uploadProgress.current / uploadProgress.total) * 100)}%</span>
+                    </div>
+                    <div className="w-full bg-border dark:bg-border-dark rounded-full h-2.5">
+                      <div
+                        className="bg-blue-500 h-2.5 rounded-full transition-all duration-300"
+                        style={{
+                          width: `${(uploadProgress.current / uploadProgress.total) * 100}%`,
+                        }}
+                      ></div>
+                    </div>
                   </div>
                 )}
 

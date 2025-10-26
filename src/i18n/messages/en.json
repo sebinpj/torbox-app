@@ -453,6 +453,24 @@
     },
     "expired": "Expired"
   },
+  "MultiupHistory": {
+    "title": "Multiup Links",
+    "columns": {
+      "fileName": "File Name",
+      "size": "Size",
+      "createdAt": "Created At",
+      "actions": "Actions"
+    },
+    "actions": {
+      "copy": "Copy",
+      "open": "Open",
+      "remove": "Remove"
+    },
+    "empty": {
+      "title": "No Multiup Links Yet",
+      "description": "Upload files to Multiup to see your links here"
+    }
+  },
   "ArchivedDownloads": {
     "title": "Archived Downloads",
     "columns": {

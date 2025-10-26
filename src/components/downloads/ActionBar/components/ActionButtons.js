@@ -39,6 +39,8 @@ export default function ActionButtons({
     isUploading: isMultiupUploading,
     uploadProgress: multiupUploadProgress,
     uploadedLinks: multiupUploadedLinks,
+    uploadingFiles: multiupUploadingFiles,
+    failedFiles: multiupFailedFiles,
     uploadToMultiup,
     clearUploadedLinks: clearMultiupUploadedLinks,
   } = useMultiupUpload();
@@ -225,6 +227,8 @@ export default function ActionButtons({
       {/* Multiup Upload Panel */}
       <MultiupUploadPanel
         uploadedLinks={multiupUploadedLinks}
+        uploadingFiles={multiupUploadingFiles}
+        failedFiles={multiupFailedFiles}
         isUploading={isMultiupUploading}
         uploadProgress={multiupUploadProgress}
         onDismiss={clearMultiupUploadedLinks}

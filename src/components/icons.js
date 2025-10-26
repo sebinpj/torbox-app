@@ -681,6 +681,25 @@ const ExternalLinkIcon = ({ className = 'h-4 w-4' }) => (
     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
   </svg>
 );
+
+const LoaderIcon = ({ className = 'h-4 w-4' }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path d="M12 2v4" />
+    <path d="M12 18v4" />
+    <path d="M4.93 4.93l2.83 2.83" />
+    <path d="M16.24 16.24l2.83 2.83" />
+    <path d="M2 12h4" />
+    <path d="M18 12h4" />
+    <path d="M4.93 19.07l2.83-2.83" />
+    <path d="M16.24 7.76l2.83-2.83" />
+  </svg>
+);
 export const Icons = {
   Link: LinkIcon,
   MagnifyingGlass: MagnifyingGlassIcon,
@@ -729,6 +748,7 @@ export const Icons = {
   Archive: ArchiveIcon,
   Restore: RestoreIcon,
   ExternalLink: ExternalLinkIcon,
+  Loader: LoaderIcon,
 };
 
 export default Icons;

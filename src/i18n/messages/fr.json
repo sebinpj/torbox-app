@@ -453,6 +453,24 @@
     },
     "expired": "Expiré"
   },
+  "MultiupHistory": {
+    "title": "Liens Multiup",
+    "columns": {
+      "fileName": "Nom du fichier",
+      "size": "Taille",
+      "createdAt": "Créé le",
+      "actions": "Actions"
+    },
+    "actions": {
+      "copy": "Copier",
+      "open": "Ouvrir",
+      "remove": "Supprimer"
+    },
+    "empty": {
+      "title": "Aucun lien Multiup pour le moment",
+      "description": "Téléchargez des fichiers vers Multiup pour voir vos liens ici"
+    }
+  },
   "ArchivedDownloads": {
     "title": "Téléchargements archivés",
     "columns": {
