@@ -31,6 +31,12 @@ export default function ActionButtons({
     phEvent('download_items');
   };
 
+  const handleSyncToMultiup = () => {
+    // Placeholder for sync to multiup functionality
+    console.log('Sync to Multiup clicked - placeholder');
+    phEvent('sync_to_multiup');
+  };
+
   const getDownloadButtonText = () => {
     if (isDownloading) return t('fetchingLinks');
     return isMobile ? t('downloadLinksMobile') : t('downloadLinks');
@@ -45,6 +51,14 @@ export default function ActionButtons({
         disabled:opacity-50 transition-colors"
       >
         {getDownloadButtonText()}
+      </button>
+
+      <button
+        onClick={handleSyncToMultiup}
+        className="bg-blue-500 text-white text-xs lg:text-sm px-4 py-1.5 rounded hover:bg-blue-600 
+        transition-colors"
+      >
+        Sync to Multiup
       </button>
 
       {(selectedItems.items?.size > 0 || hasSelectedFiles()) && (
