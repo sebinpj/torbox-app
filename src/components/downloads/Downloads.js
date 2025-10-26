@@ -204,6 +204,8 @@ export default function Downloads({ apiKey }) {
                 onBulkDownload={() =>
                   handleBulkDownload(selectedItems, sortedItems)
                 }
+                handleBulkDownload={handleBulkDownload}
+                items={sortedItems}
                 isDeleting={isDeleting}
                 onBulkDelete={(includeParentDownloads) =>
                   deleteItems(selectedItems, includeParentDownloads)
@@ -221,6 +223,9 @@ export default function Downloads({ apiKey }) {
                 getTotalDownloadSize={getTotalDownloadSize}
                 isDownloadPanelOpen={isDownloadPanelOpen}
                 setIsDownloadPanelOpen={setIsDownloadPanelOpen}
+                downloadLinks={downloadLinks}
+                setToast={setToast}
+                apiKey={apiKey}
               />
             </div>
 

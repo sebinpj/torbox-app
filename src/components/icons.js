@@ -667,6 +667,20 @@ const RestoreIcon = ({ className = 'h-4 w-4' }) => (
     <path d="M3 3v5h5" />
   </svg>
 );
+
+const ExternalLinkIcon = ({ className = 'h-4 w-4' }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path d="M15 3h6v6" />
+    <path d="M10 14 21 3" />
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+  </svg>
+);
 export const Icons = {
   Link: LinkIcon,
   MagnifyingGlass: MagnifyingGlassIcon,
@@ -714,6 +728,7 @@ export const Icons = {
   Edit: EditIcon,
   Archive: ArchiveIcon,
   Restore: RestoreIcon,
+  ExternalLink: ExternalLinkIcon,
 };
 
 export default Icons;

@@ -40,6 +40,11 @@ export default function ActionBar({
   getTotalDownloadSize,
   isDownloadPanelOpen,
   setIsDownloadPanelOpen,
+  downloadLinks,
+  setToast,
+  handleBulkDownload,
+  items,
+  apiKey,
 }) {
   const [isSticky, setIsSticky] = useState(false);
   const stickyRef = useRef(null);
@@ -110,6 +115,12 @@ export default function ActionBar({
             itemTypePlural={itemTypePlural}
             isDownloadPanelOpen={isDownloadPanelOpen}
             setIsDownloadPanelOpen={setIsDownloadPanelOpen}
+            downloadLinks={downloadLinks}
+            setToast={setToast}
+            handleBulkDownload={handleBulkDownload}
+            items={items}
+            apiKey={apiKey}
+            activeType={activeType}
           />
         )}
       </div>

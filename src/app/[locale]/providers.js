@@ -9,12 +9,25 @@ import { PostHogProvider as PHProvider } from 'posthog-js/react';
 
 export function PostHogProvider({ children }) {
   useEffect(() => {
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-      api_host:
-        process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
-      person_profiles: 'identified_only',
-      capture_pageview: false,
-    });
+    const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+    
+    // Only initialize PostHog if we have a valid key
+    if (posthogKey && posthogKey.trim() !== '') {
+      try {
+        posthog.init(posthogKey, {
+          api_host:
+            process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+          person_profiles: 'identified_only',
+          capture_pageview: false,
+        });
+      } catch (error) {
+        // Silently handle PostHog initialization errors
+        console.debug('PostHog initialization failed:', error);
+      }
+    } else {
+      // Suppress PostHog warnings when no key is provided
+      console.debug('PostHog not initialized: No API key provided');
+    }
   }, []);
 
   return (
@@ -31,13 +44,19 @@ function PostHogPageView() {
   const posthog = usePostHog();
 
   useEffect(() => {
-    if (pathname && posthog) {
-      let url = window.origin + pathname;
-      if (searchParams.toString()) {
-        url = url + '?' + searchParams.toString();
-      }
+    // Only capture pageview if PostHog is properly initialized
+    if (pathname && posthog && posthog.__loaded) {
+      try {
+        let url = window.origin + pathname;
+        if (searchParams.toString()) {
+          url = url + '?' + searchParams.toString();
+        }
 
-      posthog.capture('$pageview', { $current_url: url });
+        posthog.capture('$pageview', { $current_url: url });
+      } catch (error) {
+        // Silently handle PostHog capture errors
+        console.debug('PostHog pageview capture failed:', error);
+      }
     }
   }, [pathname, searchParams, posthog]);
 

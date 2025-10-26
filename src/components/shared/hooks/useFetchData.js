@@ -126,7 +126,7 @@ export function useFetchData(apiKey, type = 'torrents') {
           });
         }
       } catch (error) {
-        console.error('Error in auto-start check:', error);
+        console.debug('Error in auto-start check:', error);
       }
     },
     [apiKey, type],
@@ -235,12 +235,14 @@ export function useFetchData(apiKey, type = 'torrents') {
           // Return the fetched data
           return sortedItems;
         } else {
-          console.error(`Invalid ${activeType} data format:`, data);
+          // Log as debug instead of error to avoid unhandled error exceptions
+          console.debug(`Invalid ${activeType} data format:`, data);
           setLoading(false);
           return [];
         }
       } catch (err) {
-        console.error(`Error fetching ${activeType} data:`, err);
+        // Log as debug instead of error to avoid unhandled error exceptions
+        console.debug(`Error fetching ${activeType} data:`, err);
         // Only set error state if this is the latest fetch and current type
         if (currentFetchId === rateData.latestFetchId && activeType === type) {
           setError(err.message);
