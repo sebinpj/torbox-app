@@ -45,6 +45,8 @@ export default function ActionBar({
   handleBulkDownload,
   items,
   apiKey,
+  multiupCredentials,
+  onCredentialsChange,
 }) {
   const [isSticky, setIsSticky] = useState(false);
   const stickyRef = useRef(null);
@@ -121,6 +123,8 @@ export default function ActionBar({
             items={items}
             apiKey={apiKey}
             activeType={activeType}
+            multiupCredentials={multiupCredentials}
+            onCredentialsChange={onCredentialsChange}
           />
         )}
       </div>

@@ -13,6 +13,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export default function Home() {
   const [apiKey, setApiKey] = useState('');
+  const [multiupCredentials, setMultiupCredentials] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
   const { setLinkInput, validateAndAddFiles } = useUpload(apiKey, 'torrents');
@@ -32,6 +33,15 @@ export default function Home() {
       if (keys.length > 0) {
         setApiKey(keys[0].key);
         localStorage.setItem('torboxApiKey', keys[0].key);
+      }
+    }
+
+    // Load multiup credentials from storage
+    const storedCredentials = localStorage.getItem('multiupCredentials');
+    if (storedCredentials) {
+      const credentials = JSON.parse(storedCredentials);
+      if (credentials.length > 0) {
+        setMultiupCredentials(credentials[0]);
       }
     }
     setLoading(false);
@@ -111,6 +121,11 @@ export default function Home() {
     localStorage.setItem('torboxApiKey', newKey);
   };
 
+  // Handle multiup credentials change
+  const handleCredentialsChange = (credentials) => {
+    setMultiupCredentials(credentials);
+  };
+
   // Don't render anything until client-side hydration is complete
   if (!isClient)
     return (
@@ -135,8 +150,14 @@ export default function Home() {
               value={apiKey}
               onKeyChange={handleKeyChange}
               allowKeyManager={true}
+              onCredentialsSelect={handleCredentialsChange}
+              activeCredentials={multiupCredentials}
             />
-            <Downloads apiKey={apiKey} />
+            <Downloads 
+              apiKey={apiKey} 
+              multiupCredentials={multiupCredentials}
+              onCredentialsChange={handleCredentialsChange}
+            />
           </div>
         </>
       )}

@@ -4,7 +4,6 @@ import useIsMobile from '@/hooks/useIsMobile';
 import { useTranslations } from 'next-intl';
 import Icons from '@/components/icons';
 import Tooltip from '@/components/shared/Tooltip';
-import MultiupCredentialsInput from '../../MultiupCredentialsInput';
 import MultiupUploadPanel from '../../MultiupUploadPanel';
 import { useMultiupUpload } from '../../../shared/hooks/useMultiupUpload';
 
@@ -26,12 +25,12 @@ export default function ActionButtons({
   items,
   apiKey,
   activeType,
+  multiupCredentials,
+  onCredentialsChange,
 }) {
   const t = useTranslations('ActionButtons');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteParentDownloads, setDeleteParentDownloads] = useState(false);
-  const [showMultiupCredentials, setShowMultiupCredentials] = useState(false);
-  const [multiupCredentials, setMultiupCredentials] = useState(null);
   const [isMultiupPanelOpen, setIsMultiupPanelOpen] = useState(false);
   const isMobile = useIsMobile();
 
@@ -56,7 +55,10 @@ export default function ActionButtons({
 
   const handleSyncToMultiup = async () => {
     if (!multiupCredentials) {
-      setShowMultiupCredentials(true);
+      setToast({
+        type: 'error',
+        message: 'Please select Multiup credentials from the credentials manager above',
+      });
       return;
     }
 
@@ -192,37 +194,6 @@ export default function ActionButtons({
       >
         {t('clear')}
       </button>
-
-      {/* Multiup Credentials Modal */}
-      {showMultiupCredentials && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-surface dark:bg-surface-dark p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-primary-text dark:text-primary-text-dark">
-                Multiup Credentials Required
-              </h3>
-              <button
-                onClick={() => setShowMultiupCredentials(false)}
-                className="text-primary-text/50 dark:text-primary-text-dark/50 hover:text-primary-text 
-                dark:hover:text-primary-text-dark transition-colors p-1"
-              >
-                <Icons.Times className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="text-primary-text/70 dark:text-primary-text-dark/70 mb-6">
-              Please select or add your Multiup account credentials to sync files.
-            </p>
-            <MultiupCredentialsInput
-              credentials={multiupCredentials}
-              onCredentialsChange={(creds) => {
-                setMultiupCredentials(creds);
-                setShowMultiupCredentials(false);
-              }}
-              allowCredentialsManager={true}
-            />
-          </div>
-        </div>
-      )}
 
       {/* Multiup Upload Panel */}
       <MultiupUploadPanel

@@ -9,6 +9,8 @@ export default function ApiKeyInput({
   value,
   onKeyChange,
   allowKeyManager = false,
+  onCredentialsSelect,
+  activeCredentials,
 }) {
   const t = useTranslations('ApiKeyInput');
   const [showKey, setShowKey] = useState(false);
@@ -62,6 +64,8 @@ export default function ApiKeyInput({
           onKeySelect={onKeyChange}
           activeKey={value}
           onClose={() => setShowManager(false)}
+          onCredentialsSelect={onCredentialsSelect}
+          activeCredentials={activeCredentials}
         />
       )}
     </div>

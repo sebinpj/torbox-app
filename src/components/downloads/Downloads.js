@@ -21,7 +21,7 @@ import CardList from './CardList';
 import AutomationRules from './AutomationRules';
 import { formatSize } from './utils/formatters';
 
-export default function Downloads({ apiKey }) {
+export default function Downloads({ apiKey, multiupCredentials, onCredentialsChange }) {
   const [toast, setToast] = useState(null);
   const [activeType, setActiveType] = useState('torrents');
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -226,6 +226,8 @@ export default function Downloads({ apiKey }) {
                 downloadLinks={downloadLinks}
                 setToast={setToast}
                 apiKey={apiKey}
+                multiupCredentials={multiupCredentials}
+                onCredentialsChange={onCredentialsChange}
               />
             </div>
 
