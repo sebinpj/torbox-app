@@ -76,9 +76,9 @@ function getItemName(itemId, items) {
 function cleanFileName(fileName) {
   if (!fileName) return fileName;
   
-  // Match pattern: www. followed by domain (non-space, non-dash chars), then " - "
-  // This handles various TLDs and domain formats
-  const cleaned = fileName.replace(/^www\.[^-\s]+ - /, '');
+  // Match pattern: www. followed by any characters until " - " (space-dash-space)
+  // This handles various TLDs and domain formats, including dots in domain names
+  const cleaned = fileName.replace(/^www\.[^ ]+ - /, '');
   
   return cleaned.trim();
 }
