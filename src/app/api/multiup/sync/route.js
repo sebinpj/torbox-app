@@ -71,6 +71,18 @@ function getItemName(itemId, items) {
   return item?.name || `Item ${itemId}`;
 }
 
+// Helper function to clean filename by removing domain prefixes
+// Removes patterns like "www.domain.com - " or "www.domain.tld - " from the beginning
+function cleanFileName(fileName) {
+  if (!fileName) return fileName;
+  
+  // Match pattern: www. followed by domain (non-space, non-dash chars), then " - "
+  // This handles various TLDs and domain formats
+  const cleaned = fileName.replace(/^www\.[^-\s]+ - /, '');
+  
+  return cleaned.trim();
+}
+
 // Retry function with exponential backoff
 async function uploadWithRetry(downloadLink, credentials, maxRetries = 5) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -78,11 +90,15 @@ async function uploadWithRetry(downloadLink, credentials, maxRetries = 5) {
       console.log(`📤 Uploading to Multiup (attempt ${attempt}/${maxRetries}):`, downloadLink.url);
       console.log('📝 Filename being sent:', downloadLink.name);
       
+      // Clean the filename by removing domain prefixes
+      const cleanedFileName = cleanFileName(downloadLink.name);
+      console.log('🧹 Cleaned filename:', cleanedFileName);
+      
       const formData = new FormData();
       formData.append('link', downloadLink.url);
       formData.append('username', credentials.username);
       formData.append('password', credentials.password);
-      formData.append('fileName', downloadLink.name);
+      formData.append('fileName', cleanedFileName);
 
       const response = await fetch('https://multiup.io/api/remote-upload', {
         method: 'POST',
@@ -105,7 +121,7 @@ async function uploadWithRetry(downloadLink, credentials, maxRetries = 5) {
       console.log('✅ Uploaded to Multiup:', result);
       return {
         link: result.link,
-        fileName: result.fileName || downloadLink.name,
+        fileName: result.fileName || cleanedFileName,
         size: result.size,
         originalUrl: downloadLink.url,
         originalName: downloadLink.name,
